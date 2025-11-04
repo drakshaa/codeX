@@ -1,0 +1,226 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login</title>
+
+<!-- Recaptcha (i m not robot) -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<!-- Bootstrap CSS -->
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	rel="stylesheet">
+<!-- FontAwesome CSS -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+	rel="stylesheet">
+<style>
+body {
+	min-height: 100vh;
+	background: linear-gradient(135deg, #e0e7ff 0%, #f7f0fa 100%);
+}
+
+.h-custom {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pastel-card {
+	background: #fff;
+	border-radius: 26px;
+	box-shadow: 0 8px 40px 0 rgba(128, 140, 220, 0.13), 0 1.5px 10px 0
+		#e2e6fa;
+	padding: 2.5rem 2.5rem 2rem 2.5rem;
+	transition: box-shadow 0.2s;
+	border: none;
+}
+
+.pastel-card:hover {
+	box-shadow: 0 12px 50px 0 rgba(98, 114, 179, 0.17), 0 2.5px 16px 0
+		#d8ddf7;
+}
+
+.social-btn {
+	background: #e0e7fd !important;
+	color: #6274b3 !important;
+	border: none;
+	margin-right: 7px;
+	box-shadow: 0 2px 8px rgba(160, 160, 255, 0.06);
+	transition: background 0.2s, color 0.2s;
+}
+
+.social-btn:hover {
+	background: #94b2fa !important;
+	color: #fff !important;
+}
+
+.divider:after, .divider:before {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: #eceaff;
+}
+
+.form-control {
+	background: #f5f8ff !important;
+	border: 1.5px solid #dbeafe !important;
+	border-radius: 12px;
+	padding: 16px 18px;
+	font-size: 1.06rem;
+	box-shadow: 0 2px 8px rgba(163, 176, 234, 0.07);
+	color: #393975;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+	border-color: #82a2fa !important;
+	box-shadow: 0 2px 16px rgba(130, 162, 250, 0.16);
+	background: #f1f6ff !important;
+}
+
+::placeholder {
+	color: #b3b3cc !important;
+	opacity: 1;
+}
+
+.pastel-btn {
+	background: linear-gradient(90deg, #82a2fa 0%, #aca6fa 100%) !important;
+	border: none;
+	color: #fff !important;
+	font-weight: 600;
+	border-radius: 14px;
+	box-shadow: 0 4px 16px 0 rgba(130, 162, 250, 0.13);
+	letter-spacing: 0.5px;
+	font-size: 1.09rem;
+	transition: background 0.2s, box-shadow 0.2s;
+}
+
+.pastel-btn:hover {
+	background: linear-gradient(90deg, #6d97fa 0%, #b6a1fb 100%) !important;
+	box-shadow: 0 7px 28px 0 rgba(130, 162, 250, 0.18);
+}
+
+.form-label {
+	color: #a2a2c3;
+	font-weight: 500;
+	margin-left: 6px;
+}
+
+@media ( max-width : 991px) {
+	.pastel-card {
+		padding: 2rem 1.1rem;
+	}
+	.h-custom {
+		padding-top: 40px;
+		padding-bottom: 40px;
+	}
+}
+
+@media ( max-width : 768px) {
+	.h-custom {
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+		padding-top: 30px;
+		padding-bottom: 30px;
+	}
+	.pastel-card {
+		margin-top: 30px;
+		margin-bottom: 20px;
+		padding: 2rem 0.7rem;
+	}
+}
+</style>
+</head>
+<body>
+	<div class="container-fluid h-custom">
+		<div
+			class="row w-100 d-flex justify-content-center align-items-center">
+			<div
+				class="col-md-8 col-lg-6 col-xl-6 d-flex justify-content-center align-items-center">
+				<img
+					src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+					class="img-fluid" alt="Login visual"
+					style="max-width: 90%; border-radius: 24px; box-shadow: 0 6px 24px rgba(160, 140, 220, 0.12);">
+			</div>
+			<div class="col-md-7 col-lg-5 col-xl-4 offset-xl-1">
+				<div class="pastel-card">
+					<!-- Error/warning message -->
+					<div th:if="${message}" class="alert alert-danger text-center"
+						style="margin-bottom: 18px;">
+						<span th:text="${message}"></span>
+					</div>
+					<form action="/login" method="post">
+						<div class="mb-3">
+							<span class="lead fw-normal mb-0 me-3"
+								style="color: #6d7cb5; font-weight: 600; font-size: 1.18rem;">Sign
+								in with</span>
+							<button type="button" class="btn social-btn btn-floating">
+								<i class="fab fa-facebook-f"></i>
+							</button>
+							<button type="button" class="btn social-btn btn-floating">
+								<i class="fab fa-twitter"></i>
+							</button>
+							<button type="button" class="btn social-btn btn-floating">
+								<i class="fab fa-linkedin-in"></i>
+							</button>
+						</div>
+						<div class="divider d-flex align-items-center my-3">
+							<span class="text-center fw-bold mx-3 mb-0"
+								style="color: #bbb9d9; font-size: 0.98rem;">Or</span>
+						</div>
+						<!-- Username or Email input -->
+						<div class="form-outline mb-4">
+							<input type="text" id="form3Example3" name="identifier"
+								class="form-control form-control-lg"
+								placeholder="Enter your username or email" required /> <label
+								class="form-label" for="form3Example3">Username or Email</label>
+						</div>
+						<!-- Password input -->
+						<div class="form-outline mb-3">
+							<input type="password" id="form3Example4" name="password"
+								class="form-control form-control-lg"
+								placeholder="Enter password" required /> <label
+								class="form-label" for="form3Example4">Password</label>
+						</div>
+						<!-- Recaptcha row -->
+						<div class="mb-3">
+							<div class="g-recaptcha"
+								data-sitekey="6Lc8lgAsAAAAABCj456gAu0q3qs6hWm8K3kEnOn2"></div>
+						</div>
+						<!-- Remember me and Forgot password row -->
+						<div
+							class="d-flex justify-content-between align-items-center mb-3">
+							<div class="form-check mb-0">
+								<input class="form-check-input me-2" type="checkbox" value=""
+									id="form2Example3" /> <label class="form-check-label"
+									for="form2Example3" style="color: #bbb9d9"> Remember me
+								</label>
+							</div>
+							<a href="#" class="text-body" style="color: #82a2fa !important;">Forgot
+								password?</a>
+						</div>
+						<div class="text-center text-lg-start mt-3 pt-2">
+							<button type="submit"
+								class="btn pastel-btn btn-lg btn-block w-100">Login</button>
+							<p class="small fw-bold mt-3 mb-0" style="color: #b3b3cc;">
+								Don't have an account? <a href="/signup" class="link-danger"
+									style="color: #82a2fa !important;">Register</a>
+							</p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
