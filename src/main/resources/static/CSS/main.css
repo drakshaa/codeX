@@ -155,3 +155,52 @@ body::after{
     border: 2px solid #ff914d;
     object-fit: cover;
 }
+/* =======================
+   MCQ SECTION
+======================== */
+.mcq-section {
+    margin: 6rem auto;
+    text-align: center;
+    padding: 0 24px;
+    max-width: 1000px;
+}
+
+.mcq-title {
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.mcq-desc {
+    color: var(--muted);
+    max-width: 700px;
+    margin: 0 auto 36px;
+}
+
+.mcq-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 32px;
+    margin: 0 auto;
+    max-width: 600px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgba(255, 145, 77, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mcq-card h3 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--accent-2);
+}
+
+.mcq-card p {
+    color: #dcdcdc;
+    margin-bottom: 24px;
+}
+
+.mcq-btn {
+    margin-top: 12px;
+    width: 200px;
+}

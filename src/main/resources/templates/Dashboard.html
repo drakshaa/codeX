@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>CODEX • Dashboard</title>
+  <link rel="stylesheet" th:href="@{/css/Style.css}">
+  <style>
+    .board {max-width:1100px;margin:60px auto;padding:0 20px;}
+    .row {display:flex;gap:24px;flex-wrap:wrap;}
+    .card {flex:1 1 340px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+           border-radius:16px;padding:18px 18px;}
+    .q {margin:8px 0 12px;font-weight:600;}
+    .opt {display:block;margin:.35rem 0;}
+    .pill {display:inline-flex;gap:8px;margin-top:12px}
+    #score {font-size:28px;margin-top:8px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,.1);text-align:left}
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">CODEX</div>
+  <nav>
+    <a th:href="@{/home}">Home</a>
+    <a th:href="@{/dashboard}" class="active">Dashboard</a>
+    <a th:href="@{/logout}">Logout</a>
+  </nav>
+  <div class="right">
+    <div class="profile"><img src="/images/user.png" class="profile-icon"></div>
+  </div>
+</header>
+
+<main class="board">
+  <div class="row">
+    <section class="card" id="mcq">
+      <h3>MCQ Round</h3>
+      <button class="btn btn-cta" id="start">Generate Round</button>
+      <div id="quiz"></div>
+      <div class="pill">
+        <button class="btn btn-login" id="submit" disabled>Submit</button>
+        <div id="score"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Leaderboard (Top 10)</h3>
+      <table id="lb"><thead><tr><th>User</th><th>Score</th><th>When</th></tr></thead><tbody></tbody></table>
+    </section>
+  </div>
+</main>
+
+<script>
+let currentRoundId = null;
+
+const $ = (sel) => document.querySelector(sel);
+
+async function fetchJSON(url, opts={}) {
+  const res = await fetch(url, {headers: {'Content-Type':'application/json'}, ...opts});
+  return res.json();
+}
+
+async function loadLeaderboard() {
+  const r = await fetchJSON('/api/leaderboard/top');
+  const body = $('#lb tbody');
+  body.innerHTML = '';
+  r.data.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>User ${row.userId}</td><td>${row.score.toFixed(1)}</td><td>${row.createdAt}</td>`;
+    body.appendChild(tr);
+  });
+}
+
+$('#start').addEventListener('click', async () => {
+  const r = await fetchJSON('/api/mcq/round', { method:'POST' });
+  const round = r.data;
+  currentRoundId = round.roundId;
+  $('#submit').disabled = false;
+  const wrap = $('#quiz');
+  wrap.innerHTML = '';
+  round.questions.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.className = 'qwrap';
+    div.innerHTML = `<div class="q">${qi+1}. ${q.question}</div>
+      ${q.options.map((op, oi) =>
+        `<label class="opt"><input type="radio" name="q${qi}" value="${oi}"> ${op}</label>`
+      ).join('')}`;
+    wrap.appendChild(div);
+  });
+});
+
+$('#submit').addEventListener('click', async () => {
+  const answers = Array.from(document.querySelectorAll('[name^="q"]'))
+    .reduce((acc, el) => {
+      const idx = Number(el.name.substring(1));
+      acc[idx] = acc[idx] ?? null;
+      if (el.checked) acc[idx] = Number(el.value);
+      return acc;
+    }, []);
+  const payload = { roundId: currentRoundId, answers: answers };
+  const r = await fetchJSON('/api/mcq/submit', { method:'POST', body: JSON.stringify(payload)});
+  $('#score').textContent = `Score: ${r.data.toFixed(1)}`;
+  await loadLeaderboard();
+});
+
+loadLeaderboard();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+package com.nits.codex.repository;
+
+import com.nits.codex.model.Submission;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+public interface SubmissionRepository extends JpaRepository<Submission, Long> {
+    List<Submission> findTop10ByOrderByScoreDescCreatedAtAsc();
+}
