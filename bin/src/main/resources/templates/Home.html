@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hackathon 2026 • NIT Silchar</title>
+
+<link rel="stylesheet" th:href="@{/css/main.css}">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+
+	<header class="navbar">
+		<div class="brand">CODEX</div>
+
+		<nav class="nav-links">
+			<a th:href="@{/}">Home</a> <a th:href="@{/about}">About</a> <a
+				th:href="@{/hackathon/register-now}">Register</a>
+		</nav>
+
+		<div class="nav-spacer"></div>
+
+		<a class="btn btn-login" th:if="${session.activeuser == null}"
+			th:href="@{/login}"> Login </a>
+
+		<div class="dropdown profile" th:if="${session.activeuser != null}">
+
+			<a href="#" role="button" id="profileDropdown" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false"
+				class="p-0 m-0 border-0 bg-transparent" style="cursor: pointer;">
+
+				<i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+			</a>
+
+			<div class="dropdown-menu dropdown-menu-right"
+				aria-labelledby="profileDropdown">
+				<a class="dropdown-item" href="/profile">My Profile</a>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" th:href="@{/logout}">Logout</a>
+			</div>
+		</div>
+
+	</header>
+
+	<main class="hero">
+		<h1>One platform. Endless innovation.</h1>
+		<h2>Hackathon 2026 at NIT Silchar</h2>
+		<p>Join NIT Silchar’s national platform to innovate, network, and
+			code your way to excellence across AI/ML and real-world problem
+			solving.</p>
+
+		<a class="btn btn-cta"
+			th:if="${session.activeuser == null or !isRegistered}"
+			th:href="@{/join-us}"> Register Now </a>
+
+		<p th:if="${session.activeuser != null and isRegistered}"
+			class="text-success mt-3" style="color: #28a745; font-weight: bold;">
+			Registration Complete. Check status below.</p>
+
+
+		<section class="mcq-section">
+            <h2 class="mcq-title">Test Your Skills</h2>
+            
+            <div class="mcq-card">
+                <h3>MCQ Coding Round</h3>
+                <p>Start a timed question round and test your problem-solving skills.</p>
+                
+                <th:block th:with="isMcqCompleted=${mcqCompleted ?: false}, isLeader=${isTeamLeader ?: false}, isReg=${isRegistered ?: false}">
+
+                    <div th:if="${session.activeuser != null and isMcqCompleted}">
+                        <button class="btn btn-cta mcq-btn btn-success" disabled style="background-color: #28a745;">
+                            <i class="fas fa-check-circle"></i> Round Completed
+                        </button>
+                        <p class="text-success mt-2">
+                            Your results are being processed. Good luck!
+                        </p>
+                    </div>
+
+                    <div th:if="${!isMcqCompleted}">
+                    
+                        <a class="btn btn-cta mcq-btn" 
+                           th:if="${isLeader}" 
+                           th:href="@{/mcq}">
+                            Start MCQ Round
+                        </a>
+
+                        <div th:if="${session.activeuser == null or !isLeader}">
+                            <button class="btn btn-cta mcq-btn" disabled style="background-color: #dc3545;">
+                                <i class="fas fa-lock"></i> Locked
+                            </button>
+                            
+                            <p th:if="${session.activeuser != null and !isReg}" class="text-danger mt-2">
+                                * Register first to unlock the coding round.
+                            </p>
+                            <p th:if="${isReg and !isLeader}" class="text-warning mt-2">
+                                * Only the Team Leader can start the round.
+                            </p>
+                            <p th:if="${session.activeuser == null}" class="text-info mt-2">
+                                * Please log in to view status.
+                            </p>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </section>
+
+	</main>
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

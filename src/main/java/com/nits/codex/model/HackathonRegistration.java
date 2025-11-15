@@ -11,26 +11,31 @@ import lombok.*;
 @AllArgsConstructor
 public class HackathonRegistration {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String teamName;
+	private String teamName;
 
-    private String leaderName;
+	private String leaderName;
 
-    private String college;
+	private String college;
 
-    private String leaderEmail;
+	private String leaderEmail;
 
-    private String leaderPhone;
+	private String leaderPhone;
 
-    private int leaderAge;
+	private int leaderAge;
 
-    @Column(length = 1000)
-    private String teamMembers;   // comma separated list
+	@Column(length = 1000)
+	private String teamMembers; // comma separated list
 
-    private Long participantId; 
-    
-    private boolean mcqCompleted = false;
+	private Long participantId;
+
+	private boolean mcqCompleted = false;
+
+	private boolean round2Qualified = false;
+	private boolean round2Submitted = false; 
+
+	private String selectedProblemStatementId;
 }

@@ -51,4 +51,16 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
             repo.save(reg);
         }
 	}
+
+	@Override
+	public String getSelectedProblemStatementId(Long participantId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setSelectedProblemStatementId(Long participantId, String problemStatementId) {
+		// TODO Auto-generated method stub
+		
+	}
 }

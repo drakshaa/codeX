@@ -1,0 +1,228 @@
+/* src/main/resources/static/css/main.css */
+:root {
+	--bg1: #0b0e1a;
+	--bg2: #0a0c18;
+	--accent: #ff914d;
+	--accent-2: #ffb37c;
+	--text: #f1f1f1;
+	--muted: #c9c9d3;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	height: 100%;
+	margin: 0;
+	color: var(--text);
+	font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
+		"Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+		"Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+	background: radial-gradient(1200px 600px at 50% 75%, #0f1a2e 0%, var(--bg2)
+		55%, #080a14 100%);
+	overflow-x: hidden;
+}
+
+/* ✅ STAR FIELD */
+body::before, body::after {
+	content: "";
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+
+body::before {
+	background: radial-gradient(800px 400px at 20% 20%, rgba(67, 125, 255, .12)
+		0 40%, transparent 60%),
+		radial-gradient(900px 500px at 80% 30%, rgba(255, 107, 67, .10) 0 35%,
+		transparent 60%);
+	filter: blur(10px);
+}
+
+body::after {
+	background-image: radial-gradient(2px 2px at 20% 30%, #fff 40%, transparent 41%),
+		radial-gradient(1.5px 1.5px at 70% 60%, #fff 40%, transparent 41%),
+		radial-gradient(1.2px 1.2px at 45% 80%, #fff 40%, transparent 41%),
+		radial-gradient(1.8px 1.8px at 85% 20%, #fff 40%, transparent 41%),
+		radial-gradient(1.3px 1.3px at 10% 75%, #fff 40%, transparent 41%),
+		radial-gradient(1.6px 1.6px at 55% 25%, #fff 40%, transparent 41%);
+	opacity: .55;
+}
+
+/* ✅ FIXED NAVBAR */
+.navbar {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	padding: 14px 28px;
+	background: rgba(8, 10, 20, .45);
+	border-bottom: 1px solid rgba(255, 255, 255, .06);
+	backdrop-filter: blur(8px);
+}
+
+.brand {
+	font-weight: 800;
+	letter-spacing: .5px;
+	font-size: 24px;
+	color: #ffffff;
+	opacity: 1;
+}
+
+.nav-links {
+	margin-left: 24px;
+	display: flex;
+	gap: 22px;
+}
+
+.nav-links a {
+	color: var(--muted);
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.nav-links a:hover {
+	color: #fff;
+	
+}
+
+.nav-spacer {
+	flex: 1;
+}
+
+.btn {
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 18px;
+	border-radius: 999px;
+	font-weight: 600;
+}
+
+/* In main.css */
+
+.btn-login {
+    background-color: #ff7f41;
+    color: #ffffff;
+    padding: 10px 20px; 
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700; 
+    min-height: 40px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px; 
+}
+
+.btn-login:hover {
+    background-color: #ff9966;
+}
+
+/* ✅ HERO SECTION */
+.hero {
+	max-width: 1050px;
+	margin: 8rem auto 6rem;
+	text-align: center;
+	padding: 0 24px;
+}
+
+.hero h1 {
+	font-size: clamp(32px, 4.2vw, 58px);
+	margin: 0 0 18px;
+	line-height: 1.15;
+	color: #ffffff;
+	opacity: 1;
+}
+
+.hero h2 {
+	font-size: clamp(18px, 2.2vw, 28px);
+	color: var(--accent-2);
+	margin: 0 0 22px;
+}
+
+.hero p {
+	color: var(--muted);
+	margin: 0 auto 28px;
+	max-width: 780px;
+}
+
+.btn-cta {
+	background: linear-gradient(180deg, var(--accent), #ff7b2a);
+	color: #1b0e00;
+	box-shadow: 0 8px 24px rgba(255, 120, 50, .25);
+}
+
+.btn-cta:hover {
+	transform: translateY(-1px);
+}
+
+/* ✅ PROFILE ICON */
+.profile {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.profile-icon {
+	width: 38px;
+	height: 38px;
+	border-radius: 50%;
+	border: 2px solid #ff914d;
+	object-fit: cover;
+}
+/* =======================
+   MCQ SECTION
+======================== */
+.mcq-section {
+	margin: 6rem auto;
+	text-align: center;
+	padding: 0 24px;
+	max-width: 1000px;
+}
+
+.mcq-title {
+	font-size: clamp(22px, 3vw, 36px);
+	font-weight: 700;
+	margin-bottom: 10px;
+	color: #ffffff;
+}
+
+.mcq-desc {
+	color: var(--muted);
+	max-width: 700px;
+	margin: 0 auto 36px;
+}
+
+.mcq-card {
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 20px;
+	padding: 32px;
+	margin: 0 auto;
+	max-width: 600px;
+	backdrop-filter: blur(10px);
+	box-shadow: 0 0 40px rgba(255, 145, 77, 0.15);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mcq-card h3 {
+	font-size: 24px;
+	margin-bottom: 8px;
+	color: var(--accent-2);
+}
+
+.mcq-card p {
+	color: #dcdcdc;
+	margin-bottom: 24px;
+}
+
+.mcq-btn {
+	margin-top: 12px;
+	width: 200px;
+}

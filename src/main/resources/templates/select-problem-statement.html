@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Problem Statement</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { background: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { max-width: 900px; margin: 50px auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.15); background-color: #ffffff; }
+        h1 { color: #007bff; text-align: center; margin-bottom: 30px; font-weight: 600; }
+        .problem-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; transition: all 0.2s ease-in-out; }
+        .problem-card:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+        .problem-card h4 { color: #343a40; font-weight: 600; margin-bottom: 10px; }
+        .problem-card p { color: #555; }
+        .radio-label { display: block; cursor: pointer; }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Select Your Problem Statement for Round 2</h1>
+        
+        <p class="text-center text-muted mb-4">Choose one of the following problem statements that your team will address for your prototype submission.</p>
+
+        <form th:action="@{/hackathon/select-problem-statement}" method="post">
+            <div th:each="ps : ${problemStatements}" class="problem-card">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="problemStatementId" th:id="${ps.id}" th:value="${ps.id}" required>
+                    <label class="form-check-label radio-label" th:for="${ps.id}">
+                        <h4><span th:text="${ps.title}"></span> (<span th:text="${ps.id}"></span>)</h4>
+                        <p th:text="${ps.description}"></p>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block mt-4">
+                <i class="fas fa-check-circle mr-2"></i> Confirm Selection
+            </button>
+        </form>
+        
+        <div class="text-center mt-3">
+            <a th:href="@{/}" class="btn btn-sm btn-outline-secondary">Back to Home</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

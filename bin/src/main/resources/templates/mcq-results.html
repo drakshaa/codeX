@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submission Complete</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { background: #1a1a2e; color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .result-card { max-width: 600px; margin: 100px auto; background: #2a2a44; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+        .result-icon { color: #28a745; font-size: 4rem; margin-bottom: 20px; }
+        h1 { color: #ff7f41; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="result-card">
+        <i class="fas fa-check-circle result-icon"></i>
+        
+        <h1>Submission Successful!</h1>
+        
+        <p th:text="${message}"></p>
+        <p class="text-muted">Your responses have been recorded. Results will be published soon!</p>
+        
+        <div class="mt-4">
+            <a th:href="@{/}" class="btn btn-secondary btn-lg"><i class="fas fa-home mr-2"></i> Go Back Home</a>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
