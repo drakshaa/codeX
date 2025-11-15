@@ -99,4 +99,16 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
 		Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
 	    return reg.isPresent() && reg.get().isRound2Qualified();
 	}
+
+	@Override
+	public boolean isAccommodationBooked(Long participantId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setAccommodationBooked(Long participantId, boolean booked) {
+		// TODO Auto-generated method stub
+		
+	}
 }

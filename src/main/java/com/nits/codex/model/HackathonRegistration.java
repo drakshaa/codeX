@@ -41,4 +41,5 @@ public class HackathonRegistration {
 	
 	private boolean isPaid = false; 
     private String transactionId;
+    private boolean accommodationBooked = false;
 }

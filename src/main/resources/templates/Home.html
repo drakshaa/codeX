@@ -19,7 +19,10 @@
 
 		<nav class="nav-links">
 			<a th:href="@{/}">Home</a> <a th:href="@{/about}">About</a> <a
-				th:href="@{/hackathon/register-now}">Register</a>
+				th:href="@{/hackathon/register-now}">Register</a> <a
+				th:if="${session.activeuser != null and isRound2Qualified}"
+				th:href="@{/hackathon/accommodation}"
+				style="color: #ffc107; font-weight: bold;"> Accommodation </a>
 		</nav>
 
 		<div class="nav-spacer"></div>
@@ -51,18 +54,17 @@
 
 			<div th:if="${session.activeuser != null and isQualified}">
 				<h1 style="color: #28a745; font-weight: 800; margin-top: 30px;">
-					🎉 CONGRATULATIONS! YOU ARE A FINALIST! 🎉
-				</h1>
-				<p class="lead" style="color: #fff;">
-					You have qualified for Round 3 (Offline Challenge) at NIT Silchar. Check your email for details.
-				</p>
+					🎉 CONGRATULATIONS! YOU ARE A FINALIST! 🎉</h1>
+				<p class="lead" style="color: #fff;">You have qualified for
+					Round 3 (Offline Challenge) at NIT Silchar. Check your email for
+					details.</p>
 			</div>
 
 			<div th:unless="${session.activeuser != null and isQualified}">
 				<h1>One platform. Endless innovation.</h1>
 				<h2>Hackathon 2026 at NIT Silchar</h2>
-				<p>Join NIT Silchar’s national platform to innovate, network, and
-					code your way to excellence across AI/ML and real-world problem
+				<p>Join NIT Silchar’s national platform to innovate, network,
+					and code your way to excellence across AI/ML and real-world problem
 					solving.</p>
 			</div>
 
@@ -72,8 +74,9 @@
 					th:href="@{/join-us}"> Register Now </a>
 
 				<p th:if="${session.activeuser != null and isRegistered}"
-					class="text-success mt-3" style="color: #28a745; font-weight: bold;">
-					Registration Complete. Check status below.</p>
+					class="text-success mt-3"
+					style="color: #28a745; font-weight: bold;">Registration
+					Complete. Check status below.</p>
 			</div>
 
 			<section class="mcq-section" th:unless="${isQualified}">
@@ -92,8 +95,8 @@
 								style="background-color: #28a745;">
 								<i class="fas fa-check-circle"></i> Round Completed
 							</button>
-							<p class="text-success mt-2">Your results are being processed.
-								Good luck!</p>
+							<p class="text-success mt-2">Your results are being
+								processed. Good luck!</p>
 						</div>
 
 						<div th:if="${!isMcqCompleted}">
@@ -120,7 +123,8 @@
 				</div>
 			</section>
 
-			<section class="round2-section mcq-section" th:unless="${isQualified}">
+			<section class="round2-section mcq-section"
+				th:unless="${isQualified}">
 				<h2 class="mcq-title">Round 2: Problem Statement & Idea
 					Submission</h2>
 				<p class="mcq-desc">Review the problem statements, select one,
@@ -159,8 +163,8 @@
 
 						<a class="btn btn-cta"
 							th:if="${isLeader and isMcqCompleted and !hasSelectedPS and !isR2Submitted}"
-							th:href="@{/hackathon/select-problem-statement}"> View Problem
-							Statements & Submit Idea </a>
+							th:href="@{/hackathon/select-problem-statement}"> View
+							Problem Statements & Submit Idea </a>
 
 
 						<div th:if="${!isR2Submitted and (!isLeader or !isMcqCompleted)}">
@@ -171,8 +175,8 @@
 							<p th:if="${!isMcqCompleted}" class="text-danger mt-2">*
 								Complete Round 1 (MCQ) successfully to unlock Round 2.</p>
 							<p th:if="${isMcqCompleted and !isLeader}"
-								class="text-warning mt-2">* Only the Team Leader can select a
-								problem statement.</p>
+								class="text-warning mt-2">* Only the Team Leader can select
+								a problem statement.</p>
 						</div>
 					</th:block>
 				</div>

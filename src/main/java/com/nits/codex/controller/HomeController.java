@@ -30,6 +30,7 @@ public class HomeController {
             
             model.addAttribute("mcqCompleted", registrationService.hasMcqCompleted(userId));
             model.addAttribute("isRound2Qualified", registrationService.isRound2Qualified(userId));
+            model.addAttribute("isAccommodationBooked", registrationService.isAccommodationBooked(userId));
         }
 
         return "Home"; 

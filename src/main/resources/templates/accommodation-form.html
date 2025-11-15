@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Accommodation</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { background: #f8f9fa; }
+        .booking-card { max-width: 600px; margin: 80px auto; padding: 40px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); background: #fff; }
+        h1 { color: #007bff; font-weight: 700; margin-bottom: 25px; }
+        .alert-info-custom { background-color: #e0f7fa; border-left: 5px solid #00bcd4; padding: 15px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="booking-card">
+        <h1 class="text-center">Confirm Onsite Accommodation</h1>
+        
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        
+        <div class="alert-info-custom">
+            <p>As a finalist for Round 3, **free accommodation** will be provided at NIT Silchar for your team during the event days (February 2026, Last Week).</p>
+            <p>Please confirm below if your team requires the provided accommodation.</p>
+        </div>
+
+        <div th:if="${isBooked}">
+            <div class="alert alert-success text-center">
+                <i class="fas fa-check-circle"></i> **BOOKED:** Your accommodation request has been confirmed.
+            </div>
+            <a th:href="@{/}" class="btn btn-secondary btn-block">Return Home</a>
+        </div>
+        
+        <div th:unless="${isBooked}">
+            <form th:action="@{/hackathon/accommodation}" method="post">
+                <input type="hidden" name="confirmation" value="confirm_booking">
+                <button type="submit" class="btn btn-success btn-lg btn-block mt-4">
+                    <i class="fas fa-bed"></i> Yes, Confirm Accommodation Booking
+                </button>
+            </form>
+            <a th:href="@{/}" class="btn btn-outline-secondary btn-block mt-2">No, We Will Arrange Our Own</a>
+        </div>
+    </div>
+    
+</body>
+</html>
