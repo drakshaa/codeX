@@ -52,21 +52,24 @@ public class ProblemStatementController {
         model.addAttribute("problemStatements", getMockProblemStatements());
         return "select-problem-statement";
     }
-
+    
     @PostMapping("/select-problem-statement")
     public String selectProblemStatement(@RequestParam("problemStatementId") String problemStatementId,
                                          HttpSession session,
                                          RedirectAttributes redirectAttributes) {
+        
         User user = (User) session.getAttribute("activeuser");
+
         if (user == null) {
             return "redirect:/login";
         }
+        
         Long userId = (long) user.getId();
 
         registrationService.setSelectedProblemStatementId(userId, problemStatementId);
         
-        redirectAttributes.addFlashAttribute("successMessage", "Problem statement '" + problemStatementId + "' selected successfully! You can now proceed to prototype submission.");
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("successFlash", "Problem statement '" + problemStatementId + "' selected successfully! You can now proceed to prototype submission.");
+        return "redirect:/hackathon/round2-submit";
     }
 
     private static class ProblemStatement {

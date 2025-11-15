@@ -63,4 +63,16 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean hasRound2Submitted(Long participantId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void markRound2Submitted(Long participantId) {
+		// TODO Auto-generated method stub
+		
+	}
 }

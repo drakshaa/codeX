@@ -18,4 +18,9 @@ public interface HackathonRegistrationService {
 	String getSelectedProblemStatementId(Long participantId);
 
 	void setSelectedProblemStatementId(Long participantId, String problemStatementId);
+	
+	boolean hasRound2Submitted(Long participantId); 
+    
+    void markRound2Submitted(Long participantId); 
+}
 }

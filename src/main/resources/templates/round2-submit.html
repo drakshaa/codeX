@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Round 2 Submission - Prototype Materials</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        body { background: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .submission-card { max-width: 800px; margin: 50px auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.15); background-color: #ffffff; }
+        h1 { color: #007bff; text-align: center; margin-bottom: 30px; font-weight: 600; }
+        .file-upload-box { border: 2px dashed #ccc; padding: 20px; border-radius: 8px; text-align: center; cursor: pointer; transition: border-color 0.3s; }
+        .file-upload-box:hover { border-color: #007bff; }
+        .form-section { border: 1px solid #eee; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+    </style>
+</head>
+
+<body>
+
+    <div class="submission-card">
+        <h1>Round 2: Prototype Submission</h1>
+        
+        <p class="text-center text-muted mb-4">Submit your presentation, video, and initial prototype details below.</p>
+
+        <div th:if="${error}" class="alert alert-danger text-center mb-4" th:text="${error}"></div>
+        <div th:if="${successFlash}" class="alert alert-success text-center mb-4" th:text="${successFlash}"></div>
+
+        <form th:action="@{/hackathon/round2-submit}" method="post" enctype="multipart/form-data">
+            
+            <div class="form-section">
+                <h4><i class="fas fa-file-powerpoint mr-2 text-danger"></i> 1. Prototype Presentation (PPT/PDF)</h4>
+                <p class="text-muted">Upload your pitch presentation or detailed technical document.</p>
+                <div class="form-group">
+                    <input type="file" class="form-control-file" id="pptFile" name="pptFile" accept=".ppt,.pptx,.pdf" required>
+                    <small class="form-text text-muted">Max file size: 10MB. Accepted formats: PPT, PPTX, PDF.</small>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4><i class="fab fa-youtube mr-2 text-primary"></i> 2. Video Explanation URL</h4>
+                <p class="text-muted">Provide a link to a short video (max 5 minutes) explaining your prototype and idea.</p>
+                <div class="form-group">
+                    <input type="url" class="form-control" id="videoUrl" name="videoUrl" placeholder="e.g., https://youtu.be/your_prototype_video" required>
+                    <small class="form-text text-muted">Ensure the link is publicly accessible (e.g., YouTube, Google Drive link).</small>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4><i class="fas fa-code mr-2 text-success"></i> 3. Initial Prototype/Idea Summary</h4>
+                <p class="text-muted">Briefly summarize the current state of your prototype, your approach, and technologies used (max 500 words).</p>
+                <div class="form-group">
+                    <textarea class="form-control" name="prototypeSummary" rows="5" maxlength="3000" placeholder="Describe your prototype's core functionality..."></textarea>
+                    <small class="form-text text-muted">This is an essential part of the initial screening.</small>
+                </div>
+                </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block mt-4">
+                <i class="fas fa-upload mr-2"></i> Finalize & Submit All Materials
+            </button>
+        </form>
+        
+        <div class="text-center mt-3">
+            <a th:href="@{/}" class="btn btn-sm btn-outline-secondary">Back to Home</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
