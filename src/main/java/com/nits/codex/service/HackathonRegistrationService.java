@@ -1,5 +1,6 @@
 package com.nits.codex.service;
 
+import com.nits.codex.model.AccommodationBooking;
 import com.nits.codex.model.HackathonRegistration;
 
 public interface HackathonRegistrationService {
@@ -28,5 +29,7 @@ public interface HackathonRegistrationService {
     void setRound2Qualified(Long participantId, boolean status);
     boolean isAccommodationBooked(Long participantId);
     void setAccommodationBooked(Long participantId, boolean booked);
+    void saveAccommodationDetails(AccommodationBooking booking);
+    void cancelAccommodationBooking(Long teamLeaderId);
 }
 

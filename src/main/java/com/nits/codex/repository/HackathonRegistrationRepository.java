@@ -12,4 +12,5 @@ public interface HackathonRegistrationRepository
     boolean existsByParticipantId(Long participantId);
     
     Optional<HackathonRegistration> findByParticipantId(Long participantId);
+    boolean existsByTeamName(String teamName);
 }

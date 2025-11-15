@@ -1,10 +1,13 @@
 package com.nits.codex.serviceimpl;
 
 import com.nits.codex.model.HackathonRegistration;
+import com.nits.codex.model.AccommodationBooking;
 import com.nits.codex.repository.HackathonRegistrationRepository;
+import com.nits.codex.repository.AccommodationBookingRepository;
 import com.nits.codex.service.HackathonRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // Added for delete operation
 
 import java.util.Optional;
 
@@ -13,6 +16,9 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
 
     @Autowired
     private HackathonRegistrationRepository repo; 
+    
+    @Autowired
+    private AccommodationBookingRepository bookingRepository; // Properly injected
 
     @Override
     public HackathonRegistration register(HackathonRegistration reg) {
@@ -37,7 +43,6 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
 	@Override
 	public boolean hasMcqCompleted(Long participantId) {
         Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
-        
 		return reg.isPresent() && reg.get().isMcqCompleted();
 	}
 
@@ -52,29 +57,43 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
         }
 	}
 
+    // --- Round 2 Submission Methods ---
+
 	@Override
 	public String getSelectedProblemStatementId(Long participantId) {
-		// TODO Auto-generated method stub
-		return null;
+        Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
+        return reg.map(HackathonRegistration::getSelectedProblemStatementId).orElse(null);
 	}
 
 	@Override
 	public void setSelectedProblemStatementId(Long participantId, String problemStatementId) {
-		// TODO Auto-generated method stub
-		
+        Optional<HackathonRegistration> regOptional = repo.findByParticipantId(participantId);
+        
+        if (regOptional.isPresent()) {
+            HackathonRegistration reg = regOptional.get();
+            reg.setSelectedProblemStatementId(problemStatementId);
+            repo.save(reg);
+        }
 	}
 
 	@Override
 	public boolean hasRound2Submitted(Long participantId) {
-		// TODO Auto-generated method stub
-		return false;
+        Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
+		return reg.isPresent() && reg.get().isRound2Submitted();
 	}
 
 	@Override
 	public void markRound2Submitted(Long participantId) {
-		// TODO Auto-generated method stub
-		
+        Optional<HackathonRegistration> regOptional = repo.findByParticipantId(participantId);
+        
+        if (regOptional.isPresent()) {
+            HackathonRegistration reg = regOptional.get();
+            reg.setRound2Submitted(true);
+            repo.save(reg);
+        }
 	}
+
+    // --- Finalist & Qualification Methods ---
 
 	@Override
 	public String getTeamNameByLeaderId(Long participantId) {
@@ -99,16 +118,39 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
 		Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
 	    return reg.isPresent() && reg.get().isRound2Qualified();
 	}
+    
+    // --- Accommodation Booking Methods ---
 
 	@Override
 	public boolean isAccommodationBooked(Long participantId) {
-		// TODO Auto-generated method stub
-		return false;
+        Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
+		return reg.isPresent() && reg.get().isAccommodationBooked();
 	}
 
 	@Override
 	public void setAccommodationBooked(Long participantId, boolean booked) {
-		// TODO Auto-generated method stub
-		
+        Optional<HackathonRegistration> regOptional = repo.findByParticipantId(participantId);
+        
+        if (regOptional.isPresent()) {
+            HackathonRegistration reg = regOptional.get();
+            reg.setAccommodationBooked(booked);
+            repo.save(reg);
+        }
+	}
+
+	@Override
+	public void saveAccommodationDetails(AccommodationBooking booking) {
+		bookingRepository.save(booking);
+	}
+
+	@Transactional // Use @Transactional for delete operations
+	@Override
+	public void cancelAccommodationBooking(Long teamLeaderId) {
+	    
+        // 1. Delete the detailed booking record from the AccommodationBooking table
+	    bookingRepository.deleteByTeamLeaderId(teamLeaderId); 
+
+        // 2. Update the primary status flag in the HackathonRegistration table
+	    setAccommodationBooked(teamLeaderId, false);
 	}
 }
