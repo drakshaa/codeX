@@ -30,5 +30,7 @@ public class HackathonRegistration {
     @Column(length = 1000)
     private String teamMembers;   // comma separated list
 
-    private Long participantId;   // FK to logged-in participant
+    private Long participantId; 
+    
+    private boolean mcqCompleted = false;
 }

@@ -7,4 +7,7 @@ public interface HackathonRegistrationService {
 
     boolean alreadyRegistered(Long Participantid);
     boolean isTeamNameTaken(String teamName);
+    boolean isTeamLeader(Long participantId);
+    boolean hasMcqCompleted(Long participantId);
+    void markMcqCompleted(Long participantId);
 }

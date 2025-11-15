@@ -6,11 +6,13 @@ import com.nits.codex.service.HackathonRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class HackathonRegistrationServiceImpl implements HackathonRegistrationService {
 
     @Autowired
-    private HackathonRegistrationRepository repo;
+    private HackathonRegistrationRepository repo; 
 
     @Override
     public HackathonRegistration register(HackathonRegistration reg) {
@@ -24,7 +26,29 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
 
 	@Override
 	public boolean isTeamNameTaken(String teamName) {
-		// TODO Auto-generated method stub
-		return false;
+		return repo.existsByTeamName(teamName);
+	}
+
+	@Override
+	public boolean isTeamLeader(Long participantId) {
+		return repo.existsByParticipantId(participantId);
+	}
+
+	@Override
+	public boolean hasMcqCompleted(Long participantId) {
+        Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
+        
+		return reg.isPresent() && reg.get().isMcqCompleted();
+	}
+
+	@Override
+	public void markMcqCompleted(Long participantId) {
+        Optional<HackathonRegistration> regOptional = repo.findByParticipantId(participantId);
+        
+        if (regOptional.isPresent()) {
+            HackathonRegistration reg = regOptional.get();
+            reg.setMcqCompleted(true);
+            repo.save(reg);
+        }
 	}
 }

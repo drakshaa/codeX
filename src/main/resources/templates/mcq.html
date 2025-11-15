@@ -2,211 +2,142 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MCQ Round • CodeX</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <title>MCQ Round • Live Assessment</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
-
-        .mcq-container {
-            max-width: 900px;
-            margin: 6rem auto;
-            padding: 0 24px;
-            color: var(--text);
-        }
-
-        .mcq-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .mcq-header h1 {
-            font-size: 38px;
-            font-weight: 700;
-        }
-
-        .start-btn {
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: linear-gradient(180deg, var(--accent), #ff7b2a);
-            border-radius: 30px;
-            color: #1b0e00;
+        body { background: #1a1a2e; color: #fff; }
+        .assessment-container { max-width: 900px; margin: 40px auto; }
+        .question-card { background: #2a2a44; border-radius: 12px; padding: 30px; margin-bottom: 30px; }
+        .timer-box { background: #ff7f41; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 1.5rem; font-weight: bold; position: fixed; top: 20px; right: 20px; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        h1, h2 { color: #ff7f41; text-align: center; margin-bottom: 20px; }
+        .mcq-option { margin-bottom: 15px; position: relative; }
+        
+        /* ⭐ FIX 1: Hiding the actual radio button visually, but keeping it accessible */
+        .mcq-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%; /* Make the hidden input cover the entire option block */
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 2; /* Place input over the label for reliable clicking */
             cursor: pointer;
-            font-weight: 600;
-            border: none;
-            box-shadow: 0 8px 24px rgba(255, 120, 50, .25);
         }
 
-        .question-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 0 25px rgba(255, 145, 77, 0.08);
-            backdrop-filter: blur(8px);
+        /* ⭐ FIX 2: Styling the label (which is now under the input) */
+        .mcq-option label { 
+            display: block; 
+            padding: 15px; /* Increased padding for easier clicking */
+            border-radius: 8px; 
+            border: 1px solid #4a4a66; 
+            transition: background-color 0.2s, border-color 0.2s; 
+            z-index: 1; 
+            position: relative;
         }
-
-        .options label {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            background: rgba(255,255,255,0.08);
-            transition: 0.2s ease;
+        
+        /* ⭐ FIX 3: Style the selected option */
+        .mcq-option input[type="radio"]:checked + label {
+            background-color: #ff7f4133; /* Light orange background */
+            border-color: #ff7f41; /* Orange border */
+            color: #ff7f41; /* Orange text */
         }
-
-        .options label:hover {
-            background: rgba(255,145,77,0.2);
+        
+        .mcq-option label:hover { 
+            background-color: #3a3a5a; 
         }
-
-        .submit-btn {
-            padding: 14px 28px;
-            border-radius: 30px;
-            background: var(--accent);
-            color: #1b0e00;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 24px auto;
-            display: block;
-            box-shadow: 0 8px 24px rgba(255, 120, 50, .25);
-        }
-
-        .score-popup {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 18px;
-            backdrop-filter: blur(10px);
-            text-align: center;
-            color: white;
-            width: 350px;
-            display: none;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 0 40px rgba(255,145,77,0.2);
-        }
-
+        
+        .code-input { background: #1e1e2d; color: #f8f8f2; border: 1px solid #4a4a66; padding: 15px; font-family: monospace; height: 300px; resize: vertical; }
     </style>
 </head>
-
 <body>
 
-<header class="navbar">
-    <div class="logo">CODEX</div>
-
-    <nav class="nav-links">
-        <a th:href="@{/home}">Home</a>
-        <a th:href="@{/about}">About</a>
-        <a th:href="@{/register}">Register</a>
-    </nav>
-
-    <div class="nav-spacer"></div>
-
-    <div class="profile" th:if="${session.activeuser != null}">
-        <img th:src="@{/images/user.png}" class="profile-icon">
+    <div class="timer-box" id="timer">
+        <i class="fas fa-clock mr-2"></i> 00:00:00
     </div>
 
-    <a class="btn btn-login" th:if="${session.activeuser == null}" th:href="@{/login}">Login</a>
-</header>
+    <div class="assessment-container">
+        <h1>MCQ Round • Live Assessment</h1>
+        <p class="text-center text-muted">Question <span th:text="${currentIndex}"></span> of <span th:text="${totalQuestions}"></span></p>
 
+        <form th:action="@{/mcq/next}" method="post" id="assessmentForm">
+            <div class="question-card">
+                <h4 th:text="${currentIndex} + '. ' + ${question.text}">1. Which time complexity is better?</h4>
 
-<div class="mcq-container">
-
-    <div class="mcq-header">
-        <h1>MCQ Practice Round</h1>
-        <p>Click below to start a fresh MCQ round generated just for you.</p>
-        <button class="start-btn" onclick="startRound()">Start Round</button>
-    </div>
-
-    <div id="questions-area"></div>
-
-    <button id="submit-btn" class="submit-btn" onclick="submitAnswers()" style="display:none;">
-        Submit Answers
-    </button>
-</div>
-
-<!-- Score Popup -->
-<div id="score-popup" class="score-popup">
-    <h2>Your Score</h2>
-    <p id="score-value" style="font-size: 30px; margin: 10px 0;"></p>
-    <button class="btn btn-cta" onclick="closePopup()">Close</button>
-</div>
-
-
-<script>
-
-    let roundId = null;
-    let questions = [];
-
-    async function startRound() {
-        const response = await fetch('/api/mcq/round', { method: "POST" });
-        const json = await response.json();
-
-        questions = json.data.questions;
-        roundId = json.data.roundId;
-
-        renderQuestions();
-    }
-
-    function renderQuestions() {
-        const container = document.getElementById("questions-area");
-        container.innerHTML = "";
-
-        questions.forEach((q, index) => {
-            container.innerHTML += `
-                <div class="question-card">
-                    <h3>${index + 1}. ${q.question}</h3>
-                    <div class="options">
-                        ${q.options.map((opt, i) => `
-                            <label>
-                                <input type="radio" name="q${index}" value="${i}">
-                                ${opt}
-                            </label>
-                        `).join("")}
+                <div th:if="${question.type == 'MCQ'}">
+                    <p class="text-warning">Select the best option:</p>
+                    
+                    <div th:each="option, stat : ${question.options}" class="mcq-option">
+                        <th:block th:with="optionId=${'q' + question.id + '_opt' + stat.index}">
+                            
+                            <input type="radio" th:id="${optionId}" name="answer" th:value="${option}" required>
+                            <label th:for="${optionId}" th:text="${option}"></label>
+                        
+                        </th:block>
                     </div>
                 </div>
-            `;
-        });
 
-        document.getElementById("submit-btn").style.display = "block";
-    }
+                <div th:if="${question.type == 'DSA'}">
+                    <p class="text-info">Write your code solution below:</p>
+                    <textarea name="answer" class="form-control code-input" placeholder="// Write your solution here..." required></textarea>
+                    <small class="form-text text-muted mt-2">Submit clean, runnable code for evaluation.</small>
+                </div>
+                
+            </div>
 
-    async function submitAnswers() {
+            <button type="submit" class="btn btn-block btn-lg" style="background-color: #ff7f41; color: #fff;">
+                Submit & Next Question 
+            </button>
+        </form>
 
-        let answers = [];
+    </div>
 
-        questions.forEach((q, index) => {
-            let selected = document.querySelector(`input[name="q${index}"]:checked`);
-            answers.push(selected ? parseInt(selected.value) : -1);
-        });
+    <script>
+        // Data passed from the server
+        const totalTimeMinutes = [[${totalTime}]];
+        const startTime = [[${session.startTime}]];
+        const totalDurationMillis = totalTimeMinutes * 60 * 1000;
+        const form = document.getElementById('assessmentForm');
+        const timerElement = document.getElementById('timer');
 
-        const res = await fetch('/api/mcq/submit', {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                roundId: roundId,
-                answers: answers
-            })
-        });
+        function updateTimer() {
+            const currentTime = new Date().getTime();
+            const elapsed = currentTime - startTime;
+            const remaining = totalDurationMillis - elapsed;
 
-        const json = await res.json();
-        showScore(json.data);
-    }
+            if (remaining <= 0) {
+                // Time's up! Auto-submit the form
+                timerElement.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i> TIME UP!';
+                clearInterval(timerInterval);
+                form.action = "[[@{/mcq/submit-round}]]"; // Change action to final submission endpoint
+                form.submit();
+                return;
+            }
 
-    function showScore(score) {
-        document.getElementById("score-value").innerHTML = score + "%";
-        document.getElementById("score-popup").style.display = "block";
-    }
+            // Convert remaining milliseconds to HH:MM:SS
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
 
-    function closePopup() {
-        document.getElementById("score-popup").style.display = "none";
-    }
+            const display = 
+                String(hours).padStart(2, '0') + ":" + 
+                String(minutes).padStart(2, '0') + ":" + 
+                String(seconds).padStart(2, '0');
 
-</script>
+            timerElement.innerHTML = `<i class="fas fa-clock mr-2"></i> ${display}`;
+        }
+
+        // Start the timer update every second
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Initial call to display time immediately
+        updateTimer();
+    </script>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>
