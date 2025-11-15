@@ -47,122 +47,138 @@
 	</header>
 
 	<main class="hero">
-		<h1>One platform. Endless innovation.</h1>
-		<h2>Hackathon 2026 at NIT Silchar</h2>
-		<p>Join NIT Silchar’s national platform to innovate, network, and
-			code your way to excellence across AI/ML and real-world problem
-			solving.</p>
+		<th:block th:with="isQualified=${isRound2Qualified ?: false}">
 
-		<a class="btn btn-cta"
-			th:if="${session.activeuser == null or !isRegistered}"
-			th:href="@{/join-us}"> Register Now </a>
+			<div th:if="${session.activeuser != null and isQualified}">
+				<h1 style="color: #28a745; font-weight: 800; margin-top: 30px;">
+					🎉 CONGRATULATIONS! YOU ARE A FINALIST! 🎉
+				</h1>
+				<p class="lead" style="color: #fff;">
+					You have qualified for Round 3 (Offline Challenge) at NIT Silchar. Check your email for details.
+				</p>
+			</div>
 
-		<p th:if="${session.activeuser != null and isRegistered}"
-			class="text-success mt-3" style="color: #28a745; font-weight: bold;">
-			Registration Complete. Check status below.</p>
+			<div th:unless="${session.activeuser != null and isQualified}">
+				<h1>One platform. Endless innovation.</h1>
+				<h2>Hackathon 2026 at NIT Silchar</h2>
+				<p>Join NIT Silchar’s national platform to innovate, network, and
+					code your way to excellence across AI/ML and real-world problem
+					solving.</p>
+			</div>
+
+			<div th:unless="${session.activeuser != null and isQualified}">
+				<a class="btn btn-cta"
+					th:if="${session.activeuser == null or !isRegistered}"
+					th:href="@{/join-us}"> Register Now </a>
+
+				<p th:if="${session.activeuser != null and isRegistered}"
+					class="text-success mt-3" style="color: #28a745; font-weight: bold;">
+					Registration Complete. Check status below.</p>
+			</div>
+
+			<section class="mcq-section" th:unless="${isQualified}">
+				<h2 class="mcq-title">Test Your Skills</h2>
+
+				<div class="mcq-card">
+					<h3>MCQ Coding Round</h3>
+					<p>Start a timed question round and test your problem-solving
+						skills.</p>
+
+					<th:block
+						th:with="isMcqCompleted=${mcqCompleted ?: false}, isLeader=${isTeamLeader ?: false}, isReg=${isRegistered ?: false}">
+
+						<div th:if="${session.activeuser != null and isMcqCompleted}">
+							<button class="btn btn-cta mcq-btn btn-success" disabled
+								style="background-color: #28a745;">
+								<i class="fas fa-check-circle"></i> Round Completed
+							</button>
+							<p class="text-success mt-2">Your results are being processed.
+								Good luck!</p>
+						</div>
+
+						<div th:if="${!isMcqCompleted}">
+
+							<a class="btn btn-cta mcq-btn" th:if="${isLeader}"
+								th:href="@{/mcq}"> Start MCQ Round </a>
+
+							<div th:if="${session.activeuser == null or !isLeader}">
+								<button class="btn btn-cta mcq-btn" disabled
+									style="background-color: #dc3545;">
+									<i class="fas fa-lock"></i> Locked
+								</button>
+
+								<p th:if="${session.activeuser != null and !isReg}"
+									class="text-danger mt-2">* Register first to unlock the
+									coding round.</p>
+								<p th:if="${isReg and !isLeader}" class="text-warning mt-2">
+									* Only the Team Leader can start the round.</p>
+								<p th:if="${session.activeuser == null}" class="text-info mt-2">
+									* Please log in to view status.</p>
+							</div>
+						</div>
+					</th:block>
+				</div>
+			</section>
+
+			<section class="round2-section mcq-section" th:unless="${isQualified}">
+				<h2 class="mcq-title">Round 2: Problem Statement & Idea
+					Submission</h2>
+				<p class="mcq-desc">Review the problem statements, select one,
+					and submit your initial idea/prototype concept.</p>
+
+				<div class="mcq-card">
+					<h3>Problem Statement Selection & Idea Submission</h3>
+					<p>Choose a problem statement and outline your team's approach.</p>
+
+					<th:block
+						th:with="isLeader=${isTeamLeader ?: false}, isMcqCompleted=${mcqCompleted ?: false}, hasSelectedPS=${selectedProblemStatementId != null and selectedProblemStatementId != ''}, isR2Submitted=${round2Submitted ?: false}">
+
+						<div th:if="${isR2Submitted}">
+							<button class="btn btn-cta btn-success" disabled
+								style="background-color: #007bff;">
+								<i class="fas fa-check-circle"></i> Submission Complete
+							</button>
+							<p class="text-success mt-2">Your Round 2 materials are under
+								review. Finalists will be announced soon!</p>
+						</div>
+
+						<div
+							th:if="${!isR2Submitted and isMcqCompleted and hasSelectedPS}">
+							<button class="btn btn-cta btn-success" disabled
+								style="background-color: #28a745;">
+								<i class="fas fa-check-circle"></i> Problem Selected: <span
+									th:text="${selectedProblemStatementId}"></span>
+							</button>
+							<p class="text-success mt-2">Proceed to submit your prototype
+								materials (PPT/Video) using the link below.</p>
+							<a class="btn btn-cta mt-3" th:if="${isLeader}"
+								th:href="@{/hackathon/round2-submit}"> Submit Prototype
+								Materials </a>
+						</div>
 
 
-		<section class="mcq-section">
-			<h2 class="mcq-title">Test Your Skills</h2>
+						<a class="btn btn-cta"
+							th:if="${isLeader and isMcqCompleted and !hasSelectedPS and !isR2Submitted}"
+							th:href="@{/hackathon/select-problem-statement}"> View Problem
+							Statements & Submit Idea </a>
 
-			<div class="mcq-card">
-				<h3>MCQ Coding Round</h3>
-				<p>Start a timed question round and test your problem-solving
-					skills.</p>
 
-				<th:block
-					th:with="isMcqCompleted=${mcqCompleted ?: false}, isLeader=${isTeamLeader ?: false}, isReg=${isRegistered ?: false}">
-
-					<div th:if="${session.activeuser != null and isMcqCompleted}">
-						<button class="btn btn-cta mcq-btn btn-success" disabled
-							style="background-color: #28a745;">
-							<i class="fas fa-check-circle"></i> Round Completed
-						</button>
-						<p class="text-success mt-2">Your results are being processed.
-							Good luck!</p>
-					</div>
-
-					<div th:if="${!isMcqCompleted}">
-
-						<a class="btn btn-cta mcq-btn" th:if="${isLeader}"
-							th:href="@{/mcq}"> Start MCQ Round </a>
-
-						<div th:if="${session.activeuser == null or !isLeader}">
-							<button class="btn btn-cta mcq-btn" disabled
+						<div th:if="${!isR2Submitted and (!isLeader or !isMcqCompleted)}">
+							<button class="btn btn-cta btn-locked" disabled
 								style="background-color: #dc3545;">
 								<i class="fas fa-lock"></i> Locked
 							</button>
-
-							<p th:if="${session.activeuser != null and !isReg}"
-								class="text-danger mt-2">* Register first to unlock the
-								coding round.</p>
-							<p th:if="${isReg and !isLeader}" class="text-warning mt-2">
-								* Only the Team Leader can start the round.</p>
-							<p th:if="${session.activeuser == null}" class="text-info mt-2">
-								* Please log in to view status.</p>
+							<p th:if="${!isMcqCompleted}" class="text-danger mt-2">*
+								Complete Round 1 (MCQ) successfully to unlock Round 2.</p>
+							<p th:if="${isMcqCompleted and !isLeader}"
+								class="text-warning mt-2">* Only the Team Leader can select a
+								problem statement.</p>
 						</div>
-					</div>
-				</th:block>
-			</div>
-		</section>
+					</th:block>
+				</div>
+			</section>
 
-		<section class="round2-section mcq-section">
-			<h2 class="mcq-title">Round 2: Problem Statement & Idea
-				Submission</h2>
-			<p class="mcq-desc">Review the problem statements, select one,
-				and submit your initial idea/prototype concept.</p>
-
-			<div class="mcq-card">
-				<h3>Problem Statement Selection & Idea Submission</h3>
-				<p>Choose a problem statement and outline your team's approach.</p>
-
-				<th:block
-					th:with="isLeader=${isTeamLeader ?: false}, isMcqCompleted=${mcqCompleted ?: false}, hasSelectedPS=${selectedProblemStatementId != null and selectedProblemStatementId != ''}, isR2Submitted=${round2Submitted ?: false}">
-
-					<div th:if="${isR2Submitted}">
-						<button class="btn btn-cta btn-success" disabled
-							style="background-color: #007bff;">
-							<i class="fas fa-check-circle"></i> Submission Complete
-						</button>
-						<p class="text-success mt-2">Your Round 2 materials are under
-							review. Finalists will be announced soon!</p>
-					</div>
-
-					<div th:if="${!isR2Submitted and isMcqCompleted and hasSelectedPS}">
-						<button class="btn btn-cta btn-success" disabled
-							style="background-color: #28a745;">
-							<i class="fas fa-check-circle"></i> Problem Selected: <span
-								th:text="${selectedProblemStatementId}"></span>
-						</button>
-						<p class="text-success mt-2">Proceed to submit your prototype
-							materials (PPT/Video) using the link below.</p>
-						<a class="btn btn-cta mt-3" th:if="${isLeader}"
-							th:href="@{/hackathon/round2-submit}"> Submit Prototype
-							Materials </a>
-					</div>
-
-
-					<a class="btn btn-cta"
-						th:if="${isLeader and isMcqCompleted and !hasSelectedPS and !isR2Submitted}"
-						th:href="@{/hackathon/select-problem-statement}"> View Problem
-						Statements & Submit Idea </a>
-
-
-					<div th:if="${!isR2Submitted and (!isLeader or !isMcqCompleted)}">
-						<button class="btn btn-cta btn-locked" disabled
-							style="background-color: #dc3545;">
-							<i class="fas fa-lock"></i> Locked
-						</button>
-						<p th:if="${!isMcqCompleted}" class="text-danger mt-2">*
-							Complete Round 1 (MCQ) successfully to unlock Round 2.</p>
-						<p th:if="${isMcqCompleted and !isLeader}"
-							class="text-warning mt-2">* Only the Team Leader can select a
-							problem statement.</p>
-					</div>
-				</th:block>
-			</div>
-		</section>
-
+		</th:block>
 	</main>
 
 	<script

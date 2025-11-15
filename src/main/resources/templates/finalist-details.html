@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Round 3 Finalist Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { background: #1a1a2e; color: #f4f6f9; }
+        .info-card { max-width: 800px; margin: 50px auto; padding: 40px; border-radius: 15px; background: #2a2a44; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+        h1 { color: #28a745; margin-bottom: 25px; font-weight: 700; }
+        .venue { border-left: 4px solid #ff7f41; padding-left: 15px; margin-bottom: 20px; }
+        .logistics-item { background: #3a3a5a; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+        /* ⭐ NEW STYLE: Highly visible confirmation alert */
+        .selection-alert {
+            background-color: #d4edda; /* Light green background */
+            color: #155724; /* Dark green text */
+            border: 1px solid #c3e6cb;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .selection-alert h2 {
+            color: #155724;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="info-card">
+        
+        <div class="selection-alert">
+            <i class="fas fa-medal" style="font-size: 2.5rem; color: #28a745;"></i>
+            <h2>CONGRATULATIONS! YOU'RE SELECTED!</h2>
+            <p class="lead">Your team has successfully advanced to the final round.</p>
+        </div>
+
+        <h1 class="text-center" style="color:#ff7f41;"><i class="fas fa-trophy mr-2"></i> Final Round 3 Challenge</h1>
+        <p class="lead text-center text-warning" style="margin-top: -15px;">Your team has successfully advanced! Please prepare for the onsite event.</p>
+        
+        <hr style="background-color: #5a5a7a;">
+
+        <h3 class="text-info"><i class="fas fa-map-marker-alt mr-2"></i> Venue & Date</h3>
+        <div class="venue">
+            <p><strong>Mode:</strong> OFFLINE</p>
+            <p><strong>Venue:</strong> NIT Silchar, Assam</p>
+            <p><strong>Date:</strong> February 2026 (Last Week)</p>
+        </div>
+
+        <h3 class="text-info mt-4"><i class="fas fa-hotel mr-2"></i> Logistics & Schedule</h3>
+        <div class="logistics-item">
+            <p th:text="${accommodation}"></p>
+        </div>
+        <div class="logistics-item">
+            <p>Local Visit: Participants will have the opportunity to explore local attractions.</p>
+        </div>
+        <div class="logistics-item">
+            <p th:text="${galaDinner}"></p>
+        </div>
+        <div class="logistics-item">
+            <p>Objective: Final hackathon challenge with real-time problem-solving.</p>
+        </div>
+        
+        <div class="text-center mt-5">
+            <a th:href="@{/}" class="btn btn-lg btn-success">Return to Homepage</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

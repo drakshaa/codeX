@@ -28,8 +28,8 @@ public class HomeController {
             model.addAttribute("isRegistered", isRegistered);
             model.addAttribute("isTeamLeader", isTeamLeader);
             
-            // Pass the new completion flag
             model.addAttribute("mcqCompleted", registrationService.hasMcqCompleted(userId));
+            model.addAttribute("isRound2Qualified", registrationService.isRound2Qualified(userId));
         }
 
         return "Home"; 

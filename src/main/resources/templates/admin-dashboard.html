@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Hackathon 2026</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { background: #f4f6f9; color: #333; }
+        .admin-container { max-width: 1200px; margin: 30px auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #dc3545; font-weight: 700; margin-bottom: 25px; }
+        .table-striped tbody tr:nth-of-type(odd) { background-color: #f8f9fa; }
+        .status-btn { font-size: 0.85rem; padding: 5px 10px; }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-container">
+        <h1><i class="fas fa-user-shield mr-2"></i> Hackathon 2026 - Admin Dashboard</h1>
+        
+        <div th:if="${adminSuccess}" class="alert alert-success" th:text="${adminSuccess}"></div>
+        <div th:if="${adminError}" class="alert alert-danger" th:text="${adminError}"></div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h5>Promote Team to Round 3 (Finalist Selection)</h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/admin/qualify-team}" method="post" class="form-inline">
+                    <label for="leaderId" class="mr-2">Team Leader ID:</label>
+                    <input type="number" name="leaderId" id="leaderId" class="form-control mr-3" placeholder="Enter Leader ID" required>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-check-double mr-1"></i> Qualify as Finalist
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <h3>Round 2 Submissions (<span th:text="${submissions.size()}">0</span> Teams)</h3>
+        
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Leader ID</th>
+                    <th>Team Name</th>
+                    <th>Problem ID</th>
+                    <th>Submission Time</th>
+                    <th>Summary</th>
+                    <th>Materials</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="sub : ${submissions}">
+                    <td th:text="${sub.teamLeaderId}">101</td>
+                    <td th:text="${sub.teamName}">Codex Mavericks</td>
+                    <td th:text="${sub.selectedProblemStatementId}">PS001</td>
+                    <td th:text="${sub.submissionDate}">2025-11-15</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-info status-btn" data-toggle="modal" th:attr="data-target='#summaryModal'+${sub.teamLeaderId}">
+                            View Summary
+                        </button>
+                    </td>
+                    <td>
+                        <a th:href="${sub.pptFilePath}" target="_blank" class="btn btn-sm btn-secondary status-btn"><i class="fas fa-file-pdf"></i> PPT/PDF</a>
+                        <a th:href="${sub.videoUrl}" target="_blank" class="btn btn-sm btn-danger status-btn ml-1"><i class="fab fa-youtube"></i> Video</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div th:each="sub : ${submissions}" th:id="'summaryModal'+${sub.teamLeaderId}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Summary - <span th:text="${sub.teamName}"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <p th:text="${sub.prototypeSummary}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

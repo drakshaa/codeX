@@ -6,6 +6,8 @@ import com.nits.codex.model.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 	
-	User findByUsernameOrEmailAndPassword(String username, String email, String password);
+	User findByUsernameOrEmail(String username, String email);
+
 	User findByUsername(String username);
+    User findByEmail(String email);
 }

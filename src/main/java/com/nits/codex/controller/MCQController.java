@@ -21,7 +21,6 @@ public class MCQController {
     private HackathonRegistrationService registrationService;
 
     private List<Question> getMockQuestions() {
-        // Sample list shortened for brevity
         return List.of(
             new Question(1L, "Which time complexity is better?", List.of("O(n^2)", "O(n log n)", "O(2^n)", "O(n!)"), "MCQ", "O(n log n)"),
             new Question(2L, "What is the time complexity of a hash map lookup?", List.of("O(1)", "O(n)", "O(log n)", "O(n^2)"), "MCQ", "O(1)"),
@@ -82,13 +81,11 @@ public class MCQController {
     @GetMapping("/mcq/submit-round")
     public String submitRound(HttpSession session, Model model) {
         
-        // Mark completion in the database
         User user = (User) session.getAttribute("activeuser");
         if (user != null) {
             registrationService.markMcqCompleted((long) user.getId()); 
         }
 
-        // Clear session state
         session.removeAttribute("startTime");
         session.removeAttribute("questionList");
         session.removeAttribute("currentIndex");

@@ -2,7 +2,7 @@ package com.nits.codex.controller;
 
 import com.nits.codex.model.Round2Submission;
 import com.nits.codex.model.User;
-import com.nits.codex.repository.Round2SubmissionRepository; // ⭐ New Repository
+import com.nits.codex.repository.Round2SubmissionRepository;
 import com.nits.codex.service.HackathonRegistrationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,8 @@ public class Round2SubmissionController {
     private HackathonRegistrationService registrationService;
     
     @Autowired
-    private Round2SubmissionRepository submissionRepository; // ⭐ New Submission Repository
+    private Round2SubmissionRepository submissionRepository; 
 
-    // ... (showRound2SubmissionForm and round2SubmissionStatus remain unchanged) ...
 
     @GetMapping("/round2-submit")
     public String showRound2SubmissionForm(HttpSession session, Model model) {
@@ -52,21 +51,18 @@ public class Round2SubmissionController {
         
         Long userId = (long) user.getId();
         
-        // 1. Validation (ensure required fields are not empty)
+       
         if (pptFile.isEmpty() || videoUrl.isBlank() || prototypeSummary.isBlank()) {
              redirectAttributes.addFlashAttribute("error", "All fields are required.");
              return "redirect:/hackathon/round2-submit";
         }
         
-        // --- 2. Data Retrieval and Storage ---
-        
-        // Mock file path creation (In production, use secure file system/S3)
+     
         String pptFilename = "submission_" + userId + "_" + System.currentTimeMillis() + "_" + pptFile.getOriginalFilename();
         
         String teamName = registrationService.getTeamNameByLeaderId(userId);
         String psId = registrationService.getSelectedProblemStatementId(userId);
 
-        // Create and populate the submission model
         Round2Submission submission = new Round2Submission();
         submission.setTeamLeaderId(userId);
         submission.setTeamName(teamName != null ? teamName : "N/A");
@@ -75,10 +71,10 @@ public class Round2SubmissionController {
         submission.setVideoUrl(videoUrl);
         submission.setPrototypeSummary(prototypeSummary);
         
-        // Save to the database
+       
         submissionRepository.save(submission);
 
-        // 3. Mark submission complete in the HackathonRegistration table
+       
         registrationService.markRound2Submitted(userId);
         
         return "redirect:/hackathon/round2-status"; 
@@ -88,5 +84,17 @@ public class Round2SubmissionController {
     public String round2SubmissionStatus(Model model) {
         model.addAttribute("message", "Your prototype materials have been successfully submitted!");
         return "round2-status";
+    }
+    @GetMapping("/finalist-details")
+    public String showFinalistDetails(HttpSession session, Model model) {
+     
+        User user = (User) session.getAttribute("activeuser");
+        Long userId = (long) user.getId();
+        
+      
+        model.addAttribute("accommodation", "Free accommodation will be provided.");
+        model.addAttribute("galaDinner", "Academic Interaction & Gala Dinner included.");
+
+        return "finalist-details"; 
     }
 }

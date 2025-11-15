@@ -38,4 +38,7 @@ public class HackathonRegistration {
 	private boolean round2Submitted = false; 
 
 	private String selectedProblemStatementId;
+	
+	private boolean isPaid = false; 
+    private String transactionId;
 }

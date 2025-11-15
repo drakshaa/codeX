@@ -81,4 +81,22 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
 		Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
         return reg.map(HackathonRegistration::getTeamName).orElse(null);
 	}
+
+	@Override
+	public void setRound2Qualified(Long participantId, boolean status) {
+		Optional<HackathonRegistration> regOptional = repo.findByParticipantId(participantId);
+	    
+	    if (regOptional.isPresent()) {
+	        HackathonRegistration reg = regOptional.get();
+	        reg.setRound2Qualified(status);
+	        repo.save(reg);
+	    }
+		
+	}
+
+	@Override
+	public boolean isRound2Qualified(Long participantId) {
+		Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
+	    return reg.isPresent() && reg.get().isRound2Qualified();
+	}
 }

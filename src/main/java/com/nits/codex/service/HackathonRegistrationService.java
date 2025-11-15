@@ -24,5 +24,7 @@ public interface HackathonRegistrationService {
     void markRound2Submitted(Long participantId); 
     
     String getTeamNameByLeaderId(Long participantId);
+    boolean isRound2Qualified(Long participantId);
+    void setRound2Qualified(Long participantId, boolean status);
 }
-}
+

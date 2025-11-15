@@ -17,7 +17,7 @@ public class UserController {
     // SHOW LOGIN PAGE
     @GetMapping("/login")
     public String showLogin() {
-        return "LoginForm";   // your existing loginform.html
+        return "LoginForm";
     }
 
     // PROCESS LOGIN
@@ -37,13 +37,49 @@ public class UserController {
 
         session.setAttribute("activeuser", user);
 
-        return "redirect:/";    // go back to home after login
+        return "redirect:/";
     }
 
     // LOGOUT
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
+        return "redirect:/login";
+    }
+    
+    
+    @GetMapping("/signup")
+    public String showSignupForm() {
+        return "SignupForm";
+    }
+
+ 
+    @PostMapping("/signup")
+    public String handleSignup(
+            @RequestParam("fname") String firstName,
+            @RequestParam("lname") String lastName,
+            @RequestParam("username") String username,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            Model model) {
+        
+       
+        User newUser = userService.registerNewUser(
+            firstName, 
+            lastName, 
+            username, 
+            email, 
+            password
+        ); 
+
+        if (newUser == null) {
+          
+            model.addAttribute("error", "Signup failed. Username or email may already be in use.");
+            return "SignupForm";
+        }
+
+      
+        model.addAttribute("message", "Account created successfully! Please log in.");
         return "redirect:/login";
     }
 }
