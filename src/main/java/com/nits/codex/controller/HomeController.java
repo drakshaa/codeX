@@ -44,4 +44,9 @@ public class HomeController {
 
         return "redirect:/hackathon/register-now";
     }
+    
+    @GetMapping("/about")
+    public String aboutHackathon() {
+        return "about-hackathon"; // This returns templates/about-hackathon.html
+    }
 }
