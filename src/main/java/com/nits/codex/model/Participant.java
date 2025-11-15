@@ -10,8 +10,9 @@ public class Participant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Login credentials
     @Column(nullable = false)
-    private String username;   // for login
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -19,21 +20,20 @@ public class Participant {
     @Column(nullable = false, unique = true)
     private String email;
 
+    // Profile Details
     private String fullName;
-
     private String phone;
-
     private int age;
-
     private String college;
 
-    // Will be true after hackathon registration is done
+    // Hackathon Registration Status
+    @Column(nullable = false)
     private boolean registeredForHackathon = false;
 
-    public Participant() {
-    }
+    // Default constructor
+    public Participant() {}
 
-    // ---------- Getters & Setters ---------- //
+    // ---------------- GETTERS & SETTERS ---------------- //
 
     public Long getId() {
         return id;

@@ -21,4 +21,10 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
     public boolean alreadyRegistered(Long participantId) {
         return repo.existsByParticipantId(participantId);
     }
+
+	@Override
+	public boolean isTeamNameTaken(String teamName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

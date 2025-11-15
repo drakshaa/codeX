@@ -23,6 +23,6 @@ public class HomeController {
         }
 
         // If logged in → go to hackathon registration page 
-        return "redirect:/register-now";   // You can create this page later
+        return "redirect:/hackathon/register-now";   // You can create this page later
     }
 }

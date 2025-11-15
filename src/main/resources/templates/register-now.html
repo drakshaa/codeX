@@ -27,53 +27,57 @@
 
     <h2>Hackathon Registration</h2>
 
-    <!-- Success message -->
     <div th:if="${success}" class="alert alert-success text-center">
         <span th:text="${success}"></span>
     </div>
 
-    <!-- Back buttons after success -->
-    <div th:if="${success}" class="text-center mt-3 mb-3">
-        <a href="/" class="btn btn-secondary">← Back to Home</a>
-        <a href="/hackathon/register" class="btn btn-primary ml-2">Register Another Team</a>
+    <div th:if="${error}" class="alert alert-danger text-center">
+        <span th:text="${error}"></span>
     </div>
 
-    <!-- Form only visible if NOT success -->
-    <form th:if="${success == null}" th:action="@{/hackathon/register}" method="post">
+    <div th:if="${success} or (${error} and ${error.contains('You have already registered')})" class="text-center mt-3 mb-3">
+        <a href="/" class="btn btn-secondary">← Back to Home</a> 
+        <a href="/hackathon/register-now" class="btn btn-primary ml-2">Register Another Team</a>
+    </div>
+
+    <form th:if="${success == null}" 
+          th:action="@{/hackathon/register}" 
+          th:object="${hackathonRegistration}" 
+          method="post">
 
         <div class="form-group">
             <label>Team Name</label>
-            <input type="text" class="form-control" name="teamName" required>
+            <input type="text" class="form-control" name="teamName" th:field="*{teamName}" required>
         </div>
 
         <div class="form-group">
             <label>Team Leader Name</label>
-            <input type="text" class="form-control" name="leaderName" required>
+            <input type="text" class="form-control" name="leaderName" th:field="*{leaderName}" required>
         </div>
 
         <div class="form-group">
             <label>College Name</label>
-            <input type="text" class="form-control" name="college" required>
+            <input type="text" class="form-control" name="college" th:field="*{college}" required>
         </div>
 
         <div class="form-group">
             <label>Leader Email</label>
-            <input type="email" class="form-control" name="leaderEmail" required>
+            <input type="email" class="form-control" name="leaderEmail" th:field="*{leaderEmail}" required>
         </div>
 
         <div class="form-group">
             <label>Leader Phone Number</label>
-            <input type="text" class="form-control" name="leaderPhone" required>
+            <input type="text" class="form-control" name="leaderPhone" th:field="*{leaderPhone}" required>
         </div>
 
         <div class="form-group">
             <label>Leader Age</label>
-            <input type="number" class="form-control" name="leaderAge" required>
+            <input type="number" class="form-control" name="leaderAge" th:field="*{leaderAge}" required>
         </div>
 
         <div class="form-group">
             <label>Team Members (Comma separated names)</label>
-            <input type="text" class="form-control" name="teamMembers" placeholder="member1, member2, ...">
+            <input type="text" class="form-control" name="teamMembers" th:field="*{teamMembers}" placeholder="member1, member2, ...">
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">Submit Registration</button>
