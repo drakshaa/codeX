@@ -75,4 +75,10 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String getTeamNameByLeaderId(Long participantId) {
+		Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
+        return reg.map(HackathonRegistration::getTeamName).orElse(null);
+	}
 }
