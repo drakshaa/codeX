@@ -19,17 +19,26 @@ public interface HackathonRegistrationService {
 	String getSelectedProblemStatementId(Long participantId);
 
 	void setSelectedProblemStatementId(Long participantId, String problemStatementId);
-	
-	boolean hasRound2Submitted(Long participantId); 
-    
-    void markRound2Submitted(Long participantId); 
-    
-    String getTeamNameByLeaderId(Long participantId);
-    boolean isRound2Qualified(Long participantId);
-    void setRound2Qualified(Long participantId, boolean status);
-    boolean isAccommodationBooked(Long participantId);
-    void setAccommodationBooked(Long participantId, boolean booked);
-    void saveAccommodationDetails(AccommodationBooking booking);
-    void cancelAccommodationBooking(Long teamLeaderId);
-}
 
+	boolean hasRound2Submitted(Long participantId);
+
+	void markRound2Submitted(Long participantId);
+
+	String getTeamNameByLeaderId(Long participantId);
+
+	boolean isRound2Qualified(Long participantId);
+
+	void setRound2Qualified(Long participantId, boolean status);
+
+	boolean isAccommodationBooked(Long participantId);
+
+	void setAccommodationBooked(Long participantId, boolean booked);
+
+	void saveAccommodationDetails(AccommodationBooking booking);
+
+	void cancelAccommodationBooking(Long teamLeaderId);
+
+	boolean isVerified(Long participantId);
+
+	void setVerifiedStatus(Long participantId, boolean status);
+}

@@ -88,7 +88,7 @@
 						skills.</p>
 
 					<th:block
-						th:with="isMcqCompleted=${mcqCompleted ?: false}, isLeader=${isTeamLeader ?: false}, isReg=${isRegistered ?: false}">
+						th:with="isMcqCompleted=${mcqCompleted ?: false}, isLeader=${isTeamLeader ?: false}, isReg=${isRegistered ?: false}, isVerified=${isVerified ?: false}">
 
 						<div th:if="${session.activeuser != null and isMcqCompleted}">
 							<button class="btn btn-cta mcq-btn btn-success" disabled
@@ -101,23 +101,28 @@
 
 						<div th:if="${!isMcqCompleted}">
 
-							<a class="btn btn-cta mcq-btn" th:if="${isLeader}"
-								th:href="@{/mcq}"> Start MCQ Round </a>
+							<a class="btn btn-cta mcq-btn" 
+							   th:if="${isLeader and isVerified}" 
+							   th:href="@{/mcq}"> Start MCQ Round </a>
 
-							<div th:if="${session.activeuser == null or !isLeader}">
+							<div th:if="${isLeader and !isVerified}">
 								<button class="btn btn-cta mcq-btn" disabled
-									style="background-color: #dc3545;">
-									<i class="fas fa-lock"></i> Locked
+									style="background-color: #ffc107;">
+									<i class="fas fa-hourglass-half"></i> Payment Pending
+									Verification
 								</button>
-
-								<p th:if="${session.activeuser != null and !isReg}"
-									class="text-danger mt-2">* Register first to unlock the
-									coding round.</p>
-								<p th:if="${isReg and !isLeader}" class="text-warning mt-2">
-									* Only the Team Leader can start the round.</p>
-								<p th:if="${session.activeuser == null}" class="text-info mt-2">
-									* Please log in to view status.</p>
+								<p class="text-warning mt-2">* Your transaction ID is under
+									review. The MCQ round will unlock once verified.</p>
 							</div>
+							
+							<div th:if="${!isLeader and isReg}">
+							    <button class="btn btn-cta mcq-btn btn-locked" disabled
+							        style="background-color: #dc3545;">
+							        <i class="fas fa-lock"></i> Locked
+							    </button>
+							    <p class="text-danger mt-2">* Only the Team Leader can start the MCQ assessment.</p>
+							</div>
+							
 						</div>
 					</th:block>
 				</div>
@@ -135,49 +140,60 @@
 					<p>Choose a problem statement and outline your team's approach.</p>
 
 					<th:block
-						th:with="isLeader=${isTeamLeader ?: false}, isMcqCompleted=${mcqCompleted ?: false}, hasSelectedPS=${selectedProblemStatementId != null and selectedProblemStatementId != ''}, isR2Submitted=${round2Submitted ?: false}">
-
-						<div th:if="${isR2Submitted}">
-							<button class="btn btn-cta btn-success" disabled
-								style="background-color: #007bff;">
-								<i class="fas fa-check-circle"></i> Submission Complete
-							</button>
-							<p class="text-success mt-2">Your Round 2 materials are under
-								review. Finalists will be announced soon!</p>
+						th:with="isLeader=${isTeamLeader ?: false}, isMcqCompleted=${mcqCompleted ?: false}, hasSelectedPS=${selectedProblemStatementId != null and selectedProblemStatementId != ''}, isR2Submitted=${round2Submitted ?: false}, isVerified=${isVerified ?: false}">
+						
+						<div th:if="${!isVerified}">
+						    <button class="btn btn-cta btn-locked" disabled
+						        style="background-color: #dc3545;">
+						        <i class="fas fa-lock"></i> Locked
+						    </button>
+						    <p class="text-danger mt-2">* Access to Round 2 is locked until payment is verified.</p>
 						</div>
+						
+						<th:block th:if="${isVerified}">
 
-						<div
-							th:if="${!isR2Submitted and isMcqCompleted and hasSelectedPS}">
-							<button class="btn btn-cta btn-success" disabled
-								style="background-color: #28a745;">
-								<i class="fas fa-check-circle"></i> Problem Selected: <span
-									th:text="${selectedProblemStatementId}"></span>
-							</button>
-							<p class="text-success mt-2">Proceed to submit your prototype
-								materials (PPT/Video) using the link below.</p>
-							<a class="btn btn-cta mt-3" th:if="${isLeader}"
-								th:href="@{/hackathon/round2-submit}"> Submit Prototype
-								Materials </a>
-						</div>
+							<div th:if="${isR2Submitted}">
+								<button class="btn btn-cta btn-success" disabled
+									style="background-color: #007bff;">
+									<i class="fas fa-check-circle"></i> Submission Complete
+								</button>
+								<p class="text-success mt-2">Your Round 2 materials are under
+									review. Finalists will be announced soon!</p>
+							</div>
+
+							<div
+								th:if="${!isR2Submitted and isMcqCompleted and hasSelectedPS}">
+								<button class="btn btn-cta btn-success" disabled
+									style="background-color: #28a745;">
+									<i class="fas fa-check-circle"></i> Problem Selected: <span
+										th:text="${selectedProblemStatementId}"></span>
+								</button>
+								<p class="text-success mt-2">Proceed to submit your prototype
+									materials (PPT/Video) using the link below.</p>
+								<a class="btn btn-cta mt-3" th:if="${isLeader}"
+									th:href="@{/hackathon/round2-submit}"> Submit Prototype
+									Materials </a>
+							</div>
 
 
-						<a class="btn btn-cta"
-							th:if="${isLeader and isMcqCompleted and !hasSelectedPS and !isR2Submitted}"
-							th:href="@{/hackathon/select-problem-statement}"> View
-							Problem Statements & Submit Idea </a>
+							<a class="btn btn-cta"
+								th:if="${isLeader and isMcqCompleted and !hasSelectedPS and !isR2Submitted}"
+								th:href="@{/hackathon/select-problem-statement}"> View
+								Problem Statements & Submit Idea </a>
 
 
-						<div th:if="${!isR2Submitted and (!isLeader or !isMcqCompleted)}">
-							<button class="btn btn-cta btn-locked" disabled
-								style="background-color: #dc3545;">
-								<i class="fas fa-lock"></i> Locked
-							</button>
-							<p th:if="${!isMcqCompleted}" class="text-danger mt-2">*
-								Complete Round 1 (MCQ) successfully to unlock Round 2.</p>
-							<p th:if="${isMcqCompleted and !isLeader}"
-								class="text-warning mt-2">* Only the Team Leader can select
-								a problem statement.</p>
-						</div>
+							<div th:if="${!isR2Submitted and (!isLeader or !isMcqCompleted)}">
+								<button class="btn btn-cta btn-locked" disabled
+									style="background-color: #dc3545;">
+									<i class="fas fa-lock"></i> Locked
+								</button>
+								<p th:if="${!isMcqCompleted}" class="text-danger mt-2">*
+									Complete Round 1 (MCQ) successfully to unlock Round 2.</p>
+								<p th:if="${isMcqCompleted and !isLeader}"
+									class="text-warning mt-2">* Only the Team Leader can select
+									a problem statement.</p>
+							</div>
+						</th:block>
 					</th:block>
 				</div>
 			</section>

@@ -143,14 +143,29 @@ public class HackathonRegistrationServiceImpl implements HackathonRegistrationSe
 		bookingRepository.save(booking);
 	}
 
-	@Transactional // Use @Transactional for delete operations
+	@Transactional 
 	@Override
 	public void cancelAccommodationBooking(Long teamLeaderId) {
 	    
-        // 1. Delete the detailed booking record from the AccommodationBooking table
 	    bookingRepository.deleteByTeamLeaderId(teamLeaderId); 
 
-        // 2. Update the primary status flag in the HackathonRegistration table
 	    setAccommodationBooked(teamLeaderId, false);
+	}
+
+	@Override
+	public boolean isVerified(Long participantId) {
+		Optional<HackathonRegistration> reg = repo.findByParticipantId(participantId);
+	    return reg.isPresent() && reg.get().isVerified();
+	}
+
+	@Override
+	public void setVerifiedStatus(Long participantId, boolean status) {
+		Optional<HackathonRegistration> regOptional = repo.findByParticipantId(participantId);
+	    
+	    if (regOptional.isPresent()) {
+	        HackathonRegistration reg = regOptional.get();
+	        reg.setVerified(status);
+	        repo.save(reg);
+	    }
 	}
 }

@@ -33,7 +33,6 @@ public class Participant {
     // Default constructor
     public Participant() {}
 
-    // ---------------- GETTERS & SETTERS ---------------- //
 
     public Long getId() {
         return id;

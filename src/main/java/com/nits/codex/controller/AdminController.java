@@ -16,19 +16,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 public class AdminController {
 
-    // Inject necessary services and repositories
+    
     @Autowired
     private HackathonRegistrationService registrationService;
     
-    // Required to fetch Round 2 submissions for review
+    
     @Autowired
     private Round2SubmissionRepository submissionRepository; 
 
-    // --- Admin Login Handlers ---
+    
 
     @GetMapping("/login")
     public String showAdminLogin() {
-        return "admin-login"; // Loads templates/admin-login.html
+        return "admin-login"; 
     }
 
     @PostMapping("/login")
@@ -37,7 +37,7 @@ public class AdminController {
                                     HttpSession session,
                                     RedirectAttributes redirectAttributes) {
         
-        // ⭐ SIMPLIFIED SECURITY CHECK (Hardcoded credentials)
+        
         if ("admin_nits".equals(username) && "nits@2026".equals(password)) {
             session.setAttribute("isAdmin", true);
             return "redirect:/admin/dashboard";
@@ -53,21 +53,20 @@ public class AdminController {
         return "redirect:/admin/login";
     }
 
-    // --- Admin Dashboard & Core Logic ---
+   
 
     @GetMapping("/dashboard")
     public String showAdminDashboard(HttpSession session, Model model) {
         
-        // ⭐ SECURITY GATE
+        
         if (session.getAttribute("isAdmin") == null) {
             return "redirect:/admin/login";
         }
         
-        // Fetch all submissions for review
+      
         model.addAttribute("submissions", submissionRepository.findAll()); 
         
-        // We will need to fetch the associated registration status later if needed, 
-        // but for now, we just list the submissions.
+      
         
         return "admin-dashboard";
     }
@@ -77,13 +76,13 @@ public class AdminController {
                               HttpSession session,
                               RedirectAttributes redirectAttributes) {
         
-        // ⭐ SECURITY GATE
+       
         if (session.getAttribute("isAdmin") == null) {
             return "redirect:/admin/login";
         }
         
         if (registrationService.alreadyRegistered(leaderId)) {
-            // Set the qualification status to true
+           
             registrationService.setRound2Qualified(leaderId, true);
             redirectAttributes.addFlashAttribute("adminSuccess", 
                                                  "Team promoted: ID " + leaderId + " is now a Finalist.");
@@ -93,5 +92,22 @@ public class AdminController {
         }
         
         return "redirect:/admin/dashboard"; 
+    }
+    
+    @PostMapping("/verify-payment")
+    public String verifyPayment(@RequestParam("leaderId") Long leaderId, 
+                                RedirectAttributes redirectAttributes) {
+        
+       
+        
+        if (registrationService.alreadyRegistered(leaderId)) {
+            registrationService.setVerifiedStatus(leaderId, true);
+            redirectAttributes.addFlashAttribute("adminSuccess", 
+                                                 "Payment verified and registration activated for ID " + leaderId + ".");
+        } else {
+            redirectAttributes.addFlashAttribute("adminError", "Error: Registration not found.");
+        }
+        
+        return "redirect:/admin/dashboard";
     }
 }

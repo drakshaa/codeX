@@ -22,20 +22,46 @@
         <div th:if="${adminSuccess}" class="alert alert-success" th:text="${adminSuccess}"></div>
         <div th:if="${adminError}" class="alert alert-danger" th:text="${adminError}"></div>
 
-        <div class="card mb-4">
-            <div class="card-header bg-light">
-                <h5>Promote Team to Round 3 (Finalist Selection)</h5>
+        
+        <div class="card mb-4 border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5><i class="fas fa-lock-open mr-1"></i> 1. Verify Payment & Unlock Round 1 (MCQ)</h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/admin/verify-payment}" method="post" class="form-inline">
+                    <label for="verifyLeaderId" class="mr-2 font-weight-bold">Leader ID:</label>
+                    <input type="number" name="leaderId" id="verifyLeaderId" class="form-control mr-3" placeholder="Team Leader ID" required>
+                    
+                    <label for="transactionId" class="mr-2 font-weight-bold">Transaction ID:</label>
+                    <input type="text" name="transactionId" id="transactionId" class="form-control mr-3" placeholder="UPI Ref No." required>
+                    
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check-circle mr-1"></i> Verify & Unlock MCQ
+                    </button>
+                </form>
+                <small class="form-text text-muted mt-2">
+                    This action sets the team's 'isVerified' flag to true, granting access to Round 1.
+                </small>
+            </div>
+        </div>
+
+
+        <div class="card mb-4 border-warning">
+            <div class="card-header bg-warning">
+                <h5><i class="fas fa-check-double mr-1"></i> 2. Promote Team to Round 3 (Finalist Selection)</h5>
             </div>
             <div class="card-body">
                 <form th:action="@{/admin/qualify-team}" method="post" class="form-inline">
-                    <label for="leaderId" class="mr-2">Team Leader ID:</label>
+                    <label for="leaderId" class="mr-2 font-weight-bold">Team Leader ID:</label>
                     <input type="number" name="leaderId" id="leaderId" class="form-control mr-3" placeholder="Enter Leader ID" required>
-                    <button type="submit" class="btn btn-warning">
-                        <i class="fas fa-check-double mr-1"></i> Qualify as Finalist
+                    <button type="submit" class="btn btn-danger">
+                        Qualify as Finalist
                     </button>
                 </form>
             </div>
         </div>
+
+        <hr>
 
         <h3>Round 2 Submissions (<span th:text="${submissions.size()}">0</span> Teams)</h3>
         

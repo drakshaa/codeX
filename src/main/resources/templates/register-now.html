@@ -10,7 +10,7 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <style>
-/* (Styles omitted for brevity, based on your previous code) */
+/* (Styles omitted for brevity) */
 body {
 	background: #f8f9fa; 
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -70,7 +70,7 @@ h2 {
 
 		<h2>Hackathon Registration</h2>
 
-		<div th:if="${error}" class="status-alert">
+		<div th:if="${error != null and !error.contains('team name') and !error.contains('Payment')}" class="status-alert">
 			<h4>
 				<i class="fas fa-exclamation-triangle mr-2"></i> Registration Status
 			</h4>
@@ -105,12 +105,7 @@ h2 {
 				th:action="@{/hackathon/register}"
 				th:object="${hackathonRegistration}" method="post">
 
-				<div th:if="${error and error.contains('team name')}"
-					class="alert alert-danger text-center mb-4">
-					<span th:text="${error}"></span>
-				</div>
-                
-                <div th:if="${error and error.contains('Payment')}"
+				<div th:if="${error != null and (error.contains('team name') or error.contains('Payment'))}"
 					class="alert alert-danger text-center mb-4">
 					<span th:text="${error}"></span>
 				</div>

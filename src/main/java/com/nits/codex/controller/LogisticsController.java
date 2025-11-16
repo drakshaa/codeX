@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/hackathon") // Added RequestMapping to match frontend link
+@RequestMapping("/hackathon") 
 public class LogisticsController {
     
     @Autowired
@@ -25,19 +25,16 @@ public class LogisticsController {
         
         User user = (User) session.getAttribute("activeuser");
 
-        // SECURITY CHECK 1: User must be logged in
         if (user == null) {
             return "redirect:/login?needLogin";
         }
         
         Long userId = (long)user.getId();
 
-        // SECURITY CHECK 2: User must be a qualified finalist
         if (!registrationService.isRound2Qualified(userId)) {
             return "redirect:/";
         }
         
-        // Pass current booking status to the form
         model.addAttribute("isBooked", registrationService.isAccommodationBooked(userId));
         return "accommodation-form"; // Loads templates/accommodation-form.html 
     }
@@ -62,26 +59,20 @@ public class LogisticsController {
                  return "redirect:/hackathon/accommodation";
             }
 
-            // 1. Get Team Details (Assuming you have a method to fetch contact/team name)
             String teamName = registrationService.getTeamNameByLeaderId(userId); 
             
-            // 2. Create and populate the booking record
             AccommodationBooking booking = new AccommodationBooking();
             booking.setTeamLeaderId(userId);
             booking.setTeamName(teamName);
             booking.setNumberOfMembers(numMembers);
             booking.setRequiresBooking(true);
-            // Set contact phone/email from the User/HackathonRegistration objects if needed
             
-            // 3. Save details to the new table
             registrationService.saveAccommodationDetails(booking);
             
-            // 4. Mark the primary status as booked (if not already done in service)
             registrationService.setAccommodationBooked(userId, true);
             
             redirectAttributes.addFlashAttribute("successMessage", "Accommodation confirmed for " + numMembers + " members.");
         } else {
-             // If "No, We Will Arrange Our Own" is clicked, mark as NOT required
              registrationService.setAccommodationBooked(userId, false); 
              redirectAttributes.addFlashAttribute("successMessage", "Accommodation confirmed as NOT required.");
         }
@@ -99,12 +90,11 @@ public class LogisticsController {
         
         Long userId = (long) user.getId();
         
-        // Call the service to cancel the booking
         registrationService.cancelAccommodationBooking(userId);
         
         redirectAttributes.addFlashAttribute("successMessage", "Accommodation booking successfully canceled.");
         
-        // Redirect back to the form to show the cancellation status
+       
         return "redirect:/hackathon/accommodation";
     }
 }

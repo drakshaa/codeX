@@ -28,7 +28,6 @@ public class Round2SubmissionController {
 
     @GetMapping("/round2-submit")
     public String showRound2SubmissionForm(HttpSession session, Model model) {
-        // ... (existing authorization logic) ...
         User user = (User) session.getAttribute("activeuser");
         if (user == null) { return "redirect:/login?needLogin"; }
         Long userId = (long) user.getId();
